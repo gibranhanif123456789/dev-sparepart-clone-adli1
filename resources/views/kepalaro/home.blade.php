@@ -156,7 +156,7 @@
         <h1>Sistem Manajemen Sparepart</h1>
         <h2>Kepala Regional Office</h2>
         <p class="text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
-            Monitoring dan Persetujuan Request Sparepart
+            Monitoring dan Persetujuan Request Sparepart Operasional
         </p>
 
         <!-- Card Container -->

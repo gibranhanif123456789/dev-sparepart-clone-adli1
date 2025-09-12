@@ -22,7 +22,6 @@ Route::get('/', function () {
         : redirect()->route('login');
 });
 
-
 // =====================
 // AUTH
 // =====================
@@ -36,12 +35,10 @@ Route::controller(AuthController::class)->group(function () {
 // PROFILE (all roles)
 // =====================
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profile', fn() => view('profile.index'))->name('profile.index');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 });
-
 
 // =====================
 // SUPERADMIN (role:1)
@@ -53,11 +50,10 @@ Route::middleware(['auth', 'role:1'])
     ->group(function () {
         Route::get('/dashboard', 'dashboard')->name('dashboard');
         Route::get('/request', 'requestIndex')->name('request.index');
-        Route::get('/sparepart', [SuperadminController::class, 'sparepartIndex'])->name('sparepart.index');
-        Route::get('/sparepart/{tiket_sparepart}/detail', [SuperadminController::class, 'showDetail'])->name('sparepart.detail');
+        Route::get('/sparepart', 'sparepartIndex')->name('sparepart.index');
+        Route::get('/sparepart/{tiket_sparepart}/detail', 'showDetail')->name('sparepart.detail');
         Route::get('/history', 'historyIndex')->name('history.index');
     });
-
 
 // =====================
 // KEPALA RO (role:2)
@@ -67,18 +63,13 @@ Route::middleware(['auth', 'role:2'])
     ->name('kepalaro.')
     ->controller(KepalaROController::class)
     ->group(function () {
-        // Halaman Home (ini yang ditampilkan pertama kali setelah login Kepala RO)
         Route::get('/home', fn() => view('kepalaro.home'))->name('home');
-
-        // Dashboard & fitur lainnya
         Route::get('/dashboard', 'index')->name('dashboard');
         Route::get('/history', 'history')->name('history');
         Route::post('/approve/{id}', 'approve')->name('approve');
         Route::post('/reject/{id}', 'reject')->name('reject');
 
-        // API: cek jumlah pending (filter region kepala RO)
-        Route::get('/api/pending-count', [KepalaROController::class, 'pendingCount'])
-            ->name('api.pending.count');
+        Route::get('/api/pending-count', 'pendingCount')->name('api.pending.count');
     });
 
 // =====================
@@ -89,9 +80,7 @@ Route::middleware(['auth', 'role:3'])
     ->name('kepalagudang.')
     ->controller(KepalaGudangController::class)
     ->group(function () {
-        Route::get('/dashboard', fn() => view('kepalagudang.dashboard'))->name('dashboard');
         Route::get('/dashboard', 'dashboard')->name('dashboard');
-
         Route::get('/request', 'requestIndex')->name('request.index');
         Route::post('/request/store', 'requestStore')->name('request.store');
 
@@ -101,11 +90,8 @@ Route::middleware(['auth', 'role:3'])
 
         Route::get('/history', 'historyIndex')->name('history.index');
         Route::get('/history/{id}', 'historyDetail')->name('history.detail');
-
         Route::get('/profile', fn() => view('kepalagudang.profile'))->name('profile');
     });
-
-
 
 // =====================
 // USER (role:4)
@@ -117,13 +103,9 @@ Route::middleware(['auth', 'role:4'])
         Route::get('/jenisbarang', [HomeController::class, 'jenisBarang'])->name('jenis.barang');
     });
 
-
 // =====================
-// AUTHENTICATED AREA (all roles)
+// REQUEST BARANG (all authenticated users)
 // =====================
-// Menu lain
-
-// Request Barang
 Route::prefix('requestbarang')
     ->name('request.barang.')
     ->controller(PermintaanController::class)
@@ -131,4 +113,22 @@ Route::prefix('requestbarang')
         Route::get('/', 'index')->name('index');
         Route::get('/{tiket}', 'getDetail')->name('detail');
         Route::post('/', 'store')->name('store');
+
+        // 🔥 API: Detail Status Approval Berjenjang
+        Route::get('/api/permintaan/{tiket}/status', function ($tiket) {
+            $permintaan = \App\Models\Permintaan::where('tiket', $tiket)->firstOrFail();
+
+            return response()->json([
+                'ro' => $permintaan->status_ro,
+                'gudang' => $permintaan->status_gudang,
+                'admin' => $permintaan->status_admin,
+                'super_admin' => $permintaan->status_super_admin,
+                'catatan' => collect([
+                    $permintaan->catatan_ro,
+                    $permintaan->catatan_gudang,
+                    $permintaan->catatan_admin,
+                    $permintaan->catatan_super_admin,
+                ])->filter()->first(),
+            ]);
+        })->name('api.permintaan.status');
     });

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Superadmin')</title>
+    <title>@yield('title', 'Kepala Gudang')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
@@ -461,37 +461,41 @@
 </head>
 
 <body>
+    <!-- Sidebar Toggle Button for Mobile -->
+    <button class="sidebar-toggle d-flex align-items-center justify-content-center">
+        <i class="bi bi-list"></i>
+    </button>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar-header p-3">
-            <h4 class="text-white"><i class="bi bi-gear-fill"></i> <span>Superadmin</span></h4>
+            <h4 class="text-white"><i class="bi bi-archive-fill"></i> <span>Kepala Gudang</span></h4>
         </div>
         <div class="list-group list-group-flush flex-grow-1">
-            <a href="{{ route('superadmin.dashboard') }}" class="list-group-item list-group-item-action">
+            <a href="{{ route('kepalagudang.dashboard') }}" class="list-group-item list-group-item-action {{ request()->routeIs('kepalagudang.dashboard') ? 'active' : '' }}">
                 <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
             </a>
-            <a href="{{ route('superadmin.request.index') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-cart-check"></i> <span>Request Barang</span>
+            <a href="{{ route('kepalagudang.request.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('kepalagudang.request.index') ? 'active' : '' }}">
+                <i class="bi bi-send"></i> <span>Request / Send</span>
             </a>
-            <a href="{{ route('superadmin.sparepart.index') }}" class="list-group-item list-group-item-action">
+            <a href="{{ route('kepalagudang.sparepart.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('kepalagudang.sparepart.index') ? 'active' : '' }}">
                 <i class="bi bi-tools"></i> <span>Daftar Sparepart</span>
             </a>
-            <a href="{{ route('superadmin.history.index') }}" class="list-group-item list-group-item-action">
+            <a href="{{ route('kepalagudang.history.index') }}" class="list-group-item list-group-item-action {{ request()->routeIs('kepalagudang.history.index') ? 'active' : '' }}">
                 <i class="bi bi-clock-history"></i> <span>Histori Barang</span>
             </a>
         </div>
 
-<div class="sidebar-footer">
-    <a href="{{ route('profile.edit') }}" class="d-flex align-items-center text-decoration-none text-white">
-        <div class="user-avatar">
-            <i class="bi bi-person-fill"></i>
-        </div>
-        <div class="user-details">
-            <p class="user-name mb-0">{{ Auth::user()->name }}</p>
-            <small class="user-role">{{ Auth::user()->bagian }}</small>
-        </div>
-    </a>
-</div>
+        <div class="sidebar-footer">
+            <a href="{{ route('profile.index') }}" class="d-flex align-items-center text-decoration-none text-white">
+                <div class="user-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <div class="user-details">
+                    <p class="user-name mb-0">{{ Auth::user()->name ?? 'Kepala Gudang' }}</p>
+                    <small class="user-role">Kepala Gudang</small>
+                </div>
+            </a>
 
             <form action="{{ route('logout') }}" method="POST" class="mt-2">
                 @csrf
@@ -502,14 +506,32 @@
         </div>
     </div>
 
-
-
     <!-- Main Content -->
     <div class="main-content">
         @yield('content')
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle sidebar on mobile
+        document.querySelector('.sidebar-toggle').addEventListener('click', function () {
+            document.querySelector('.sidebar').classList.toggle('show');
+        });
+
+        // Update date dynamically (if needed in child pages)
+        function updateDate() {
+            const now = new Date();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedDate = now.toLocaleDateString('id-ID', options);
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                dateElement.textContent = formattedDate;
+            }
+        }
+
+        // Initial call
+        updateDate();
+    </script>
     @stack('scripts')
 </body>
 

@@ -62,13 +62,14 @@
         <!-- Header PGN -->
         <div class="bg-[#002060] text-white py-6 px-8 text-center">
             <div class="flex items-center justify-center space-x-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#00A0E3]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              
+                <h1 class="text-2xl font-bold">SiSparepart</h1>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#ffff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"/>
                     <path d="M12 8v8M8 12h8"/>
                 </svg>
-                <h1 class="text-2xl font-bold">Request Sparepart</h1>
             </div>
-            <p class="text-sm text-[#00A0E3] mt-1">PT PERTAMINA GAS NEGARA</p>
+            <p class="text-sm text-[#ffff] mt-1">Sistem Manajemen Sparepart PT.PGN COM</p>
         </div>
 
         <!-- Form Login -->
@@ -139,8 +140,9 @@
         <!-- Footer -->
         <div class="bg-gray-50 px-8 py-4 text-center border-t border-gray-100">
             <p class="text-xs text-gray-500">
-                &copy; {{ date('Y') }} PT Pertamina Gas Negara. Hak Cipta Dilindungi.
+                &copy; {{ date('Y') }} PT PGN COM. Hak Cipta Dilindungi.
             </p>
+
         </div>
     </div>
 </body>
