@@ -73,7 +73,6 @@
                             <td class="px-4 py-3 text-sm">{{ \Carbon\Carbon::parse($p->tanggal_permintaan)->translatedFormat('l, d F Y') }}</td>
                             <td class="px-4 py-3 text-sm">
                                 <div class="flex items-center space-x-2">
-                                    <!-- Status Badge -->
                                     @if ($p->status === 'diterima')
                                         <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">Diterima</span>
                                     @elseif ($p->status === 'ditolak')
@@ -82,7 +81,6 @@
                                         <span class="inline-flex items-center px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">Pending</span>
                                     @endif
 
-                                    <!-- Ikon Mata untuk Detail Approval -->
                                     <button 
                                         type="button"
                                         onclick="showStatusDetailModal('{{ $p->tiket }}', 'user')"
@@ -141,42 +139,29 @@
                     </thead>
                     <tbody id="request-table-body">
                         <tr class="hover:bg-gray-50 transition-colors">
-                            <!-- Kolom No -->
                             <td class="px-4 py-3 text-sm text-center border border-gray-300 bg-gray-50 font-mono">1</td>
-
-                            <!-- Kolom Kategori -->
                             <td class="border border-gray-300">
                                 <select name="items[0][kategori]" class="w-full border-0 outline-none px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                                     <option value="aset">Aset</option>
                                     <option value="non-aset">Non-Aset</option>
                                 </select>
                             </td>
-
-                            <!-- Kolom Nama Item -->
                             <td class="border border-gray-300">
                                 <select name="items[0][nama]" class="w-full border-0 outline-none px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                                     <option value="">Pilih Item</option>
                                 </select>
                             </td>
-
-                            <!-- Kolom Deskripsi -->
                             <td class="border border-gray-300">
                                 <select name="items[0][deskripsi]" class="w-full border-0 outline-none px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
                                     <option value="">Pilih Tipe</option>
                                 </select>
                             </td>
-
-                            <!-- Kolom Jumlah -->
                             <td class="border border-gray-300">
                                 <input type="number" class="w-full border-0 outline-none px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" name="items[0][jumlah]" min="1" value="1" required>
                             </td>
-
-                            <!-- Kolom Keterangan -->
                             <td class="border border-gray-300">
                                 <input type="text" class="w-full border-0 outline-none px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500" name="items[0][keterangan]" required>
                             </td>
-
-                            <!-- Kolom Aksi -->
                             <td class="px-4 py-3 text-center border border-gray-300">
                                 <button type="button" class="btn btn-sm btn-danger opacity-50 cursor-not-allowed" disabled>
                                     <i class="fas fa-trash"></i>
@@ -187,14 +172,12 @@
                 </table>
             </div>
 
-            <!-- Tombol: Tambah Baris di kiri, Batal & Kirim di kanan -->
+            <!-- Tombol: Tambah Baris & Kirim -->
             <div class="flex justify-between items-center mt-6">
-                <!-- Kiri: Tombol Tambah Baris -->
                 <button type="button" onclick="tambahRow()" class="btn btn-outline-primary bg-blue-600 hover:bg-blue-700 text-white border border-blue-600 px-4 py-2 rounded-md text-sm flex items-center transition-all duration-200">
                     <i class="fas fa-plus me-2"></i> Tambah Baris
                 </button>
 
-                <!-- Kanan: Batal & Kirim -->
                 <div class="flex gap-2">
                     <button type="button" onclick="cancelForm()" class="btn btn-secondary bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-md text-sm transition-all duration-200">
                         <i class="fas fa-times me-2"></i> Batal
@@ -226,18 +209,10 @@
                     </div>
                     <div id="modal-content" style="display: none;">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-sm">
-                            <div>
-                                <strong>Nama Tiket:</strong> <span id="modal-ticket-name"></span>
-                            </div>
-                            <div>
-                                <strong>Tanggal:</strong> <span id="modal-ticket-date"></span>
-                            </div>
-                            <div>
-                                <strong>User:</strong> <span id="modal-ticket-user"></span>
-                            </div>
-                            <div>
-                                <strong>Jumlah Item:</strong> <span id="modal-ticket-count"></span>
-                            </div>
+                            <div><strong>Nama Tiket:</strong> <span id="modal-ticket-name"></span></div>
+                            <div><strong>Tanggal:</strong> <span id="modal-ticket-date"></span></div>
+                            <div><strong>User:</strong> <span id="modal-ticket-user"></span></div>
+                            <div><strong>Jumlah Item:</strong> <span id="modal-ticket-count"></span></div>
                         </div>
                         <h6 class="mt-4 mb-3 font-semibold">Daftar Barang:</h6>
                         <div class="overflow-x-auto">
@@ -265,7 +240,7 @@
         </div>
     </div>
 
-    <!-- Modal Detail Approval Berjenjang -->
+    <!-- Modal Approval -->
     <div x-data="{ showStatusDetail: false, status: {}, role: 'user' }"
          x-show="showStatusDetail"
          x-cloak
@@ -283,7 +258,6 @@
                 </div>
                 <div class="p-6">
                     <div class="space-y-4 text-sm">
-                        <!-- Kepala RO -->
                         <template x-if="['user'].includes(role)">
                             <div class="flex justify-between items-center p-3 border border-gray-200 rounded">
                                 <span class="font-medium">Kepala RO</span>
@@ -299,7 +273,6 @@
                             </div>
                         </template>
 
-                        <!-- Kepala Gudang -->
                         <template x-if="['user', 'kepala_ro'].includes(role)">
                             <div class="flex justify-between items-center p-3 border border-gray-200 rounded">
                                 <span class="font-medium">Kepala Gudang</span>
@@ -315,7 +288,6 @@
                             </div>
                         </template>
 
-                        <!-- Admin -->
                         <template x-if="['user', 'kepala_ro', 'kepala_gudang'].includes(role)">
                             <div class="flex justify-between items-center p-3 border border-gray-200 rounded">
                                 <span class="font-medium">Admin</span>
@@ -331,7 +303,6 @@
                             </div>
                         </template>
 
-                        <!-- Super Admin -->
                         <template x-if="['user', 'kepala_ro', 'kepala_gudang', 'admin'].includes(role)">
                             <div class="flex justify-between items-center p-3 border border-gray-200 rounded">
                                 <span class="font-medium">Super Admin</span>
@@ -347,7 +318,6 @@
                             </div>
                         </template>
 
-                        <!-- Catatan Jika Ditolak -->
                         <div class="mt-4 text-sm" x-show="status.catatan">
                             <strong>Catatan:</strong>
                             <p x-text="status.catatan" class="text-gray-600 mt-1"></p>
@@ -370,71 +340,70 @@
             document.getElementById('history-section').classList.add('hidden');
             document.getElementById('form-section').classList.remove('hidden');
         }
-       // Inisialisasi dropdown pada baris pertama saat halaman dimuat
-document.addEventListener('DOMContentLoaded', function () {
-    const firstRow = document.querySelector('#request-table-body tr');
-    if (!firstRow) return;
 
-    const selectKategori = firstRow.querySelector('select[name*="[kategori]"]');
-    const selectNama = firstRow.querySelector('select[name*="[nama]"]');
-    const selectTipe = firstRow.querySelector('select[name*="[deskripsi]"]');
+        document.addEventListener('DOMContentLoaded', function () {
+            const firstRow = document.querySelector('#request-table-body tr');
+            if (!firstRow) return;
 
-    // Pastikan elemen ada
-    if (selectKategori && selectNama && selectTipe) {
-        // Pasang event listener agar reaktif saat ganti kategori
-        selectKategori.addEventListener('change', () => {
-            loadItemsByKategori(selectKategori, selectNama);
-            loadTipeByKategori(selectKategori, selectTipe);
+            const selectKategori = firstRow.querySelector('select[name*="[kategori]"]');
+            const selectNama = firstRow.querySelector('select[name*="[nama]"]');
+            const selectTipe = firstRow.querySelector('select[name*="[deskripsi]"]');
+
+            if (selectKategori && selectNama && selectTipe) {
+                selectKategori.addEventListener('change', () => {
+                    loadItemsByKategori(selectKategori, selectNama);
+                    selectTipe.innerHTML = '<option value="">Pilih Tipe</option>';
+                });
+
+                selectNama.addEventListener('change', () => {
+                    loadTipeByKategoriAndJenis(selectKategori, selectNama, selectTipe);
+                });
+
+                if (selectKategori.value) {
+                    loadItemsByKategori(selectKategori, selectNama);
+                }
+            }
         });
-
-        // Isi dropdown saat halaman dimuat jika kategori sudah dipilih
-        if (selectKategori.value) {
-            loadItemsByKategori(selectKategori, selectNama);
-            loadTipeByKategori(selectKategori, selectTipe);
-        }
-    }
-});
 
         function closeDetailModal() {
             const modal = document.getElementById('detail-modal') || document.querySelector('[x-show="showDetail"]');
-            if (modal) {
-                modal.style.display = 'none';
-            }
+            if (modal) modal.style.display = 'none';
             const alpineEl = document.querySelector('[x-data]');
-            if (alpineEl && alpineEl.__x) {
-                alpineEl.__x.$data.showDetail = false;
-            }
+            if (alpineEl && alpineEl.__x) alpineEl.__x.$data.showDetail = false;
         }
 
-      // Load nama item berdasarkan kategori
-async function loadItemsByKategori(selectKategori, targetSelect) {
-    const kategori = selectKategori.value;
-    if (!kategori) return;
-
-    try {
-        const response = await fetch(`/requestbarang/api/jenis-barang?kategori=${kategori}`);
-        const items = await response.json();
-
-        targetSelect.innerHTML = '<option value="">Pilih Item</option>';
-        items.forEach(item => {
-            const option = document.createElement('option');
-            option.value = item.nama; // ✅ Sekarang pakai `nama`
-            option.textContent = item.nama;
-            targetSelect.appendChild(option);
-        });
-    } catch (err) {
-        console.error('Gagal muat daftar barang:', err);
-        targetSelect.innerHTML = '<option value="">Gagal muat data</option>';
-    }
-}
-
-        // Load tipe/deskripsi berdasarkan kategori
-        async function loadTipeByKategori(selectKategori, targetSelect) {
+        async function loadItemsByKategori(selectKategori, targetSelect) {
             const kategori = selectKategori.value;
             if (!kategori) return;
 
             try {
-                const response = await fetch(`/requestbarang/api/tipe-barang?kategori=${kategori}`);
+                const response = await fetch(`/requestbarang/api/jenis-barang?kategori=${kategori}`);
+                const items = await response.json();
+
+                targetSelect.innerHTML = '<option value="">Pilih Item</option>';
+                items.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item.nama;
+                    targetSelect.appendChild(option);
+                });
+            } catch (err) {
+                console.error('Gagal muat daftar barang:', err);
+                targetSelect.innerHTML = '<option value="">Gagal muat data</option>';
+            }
+        }
+
+        async function loadTipeByKategoriAndJenis(selectKategori, selectJenis, targetSelect) {
+            const kategori = selectKategori.value;
+            const jenisId = selectJenis.value;
+
+            if (!kategori || !jenisId) {
+                targetSelect.innerHTML = '<option value="">Pilih Tipe</option>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/requestbarang/api/tipe-barang?kategori=${kategori}&jenis_id=${jenisId}`);
                 const tipes = await response.json();
 
                 targetSelect.innerHTML = '<option value="">Pilih Tipe</option>';
@@ -494,12 +463,15 @@ async function loadItemsByKategori(selectKategori, targetSelect) {
 
             selectKategori.addEventListener('change', () => {
                 loadItemsByKategori(selectKategori, selectNama);
-                loadTipeByKategori(selectKategori, selectTipe);
+                selectTipe.innerHTML = '<option value="">Pilih Tipe</option>';
+            });
+
+            selectNama.addEventListener('change', () => {
+                loadTipeByKategoriAndJenis(selectKategori, selectNama, selectTipe);
             });
 
             if (selectKategori.value) {
                 loadItemsByKategori(selectKategori, selectNama);
-                loadTipeByKategori(selectKategori, selectTipe);
             }
         }
 
@@ -509,9 +481,7 @@ async function loadItemsByKategori(selectKategori, targetSelect) {
             const rows = document.querySelectorAll('#request-table-body tr');
             rows.forEach((row, index) => {
                 const noCell = row.cells[0];
-                if (noCell) {
-                    noCell.textContent = index + 1;
-                }
+                if (noCell) noCell.textContent = index + 1;
             });
             noRow = rows.length;
         }
@@ -564,21 +534,20 @@ async function loadItemsByKategori(selectKategori, targetSelect) {
 
             selectKategori.addEventListener('change', () => {
                 loadItemsByKategori(selectKategori, selectNama);
-                loadTipeByKategori(selectKategori, selectTipe);
+                selectTipe.innerHTML = '<option value="">Pilih Tipe</option>';
+            });
+
+            selectNama.addEventListener('change', () => {
+                loadTipeByKategoriAndJenis(selectKategori, selectNama, selectTipe);
             });
 
             noRow = 1;
         }
 
         function showStatusDetailModal(tiket, userRole) {
-            console.log("Mengambil detail untuk tiket:", tiket);
             fetch(`/requestbarang/api/permintaan/${tiket}/status`)
-                .then(response => {
-                    if (!response.ok) throw new Error('Not Found');
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
-                    console.log("Data diterima:", data);
                     const modal = document.querySelector('#status-detail-modal');
                     if (modal && modal.__x) {
                         modal.__x.$data.status = data;
@@ -587,8 +556,7 @@ async function loadItemsByKategori(selectKategori, targetSelect) {
                     }
                 })
                 .catch(err => {
-                    console.error("Error:", err);
-                    alert('Gagal muat detail status approval. Cek koneksi atau login ulang.');
+                    alert('Gagal muat detail status approval.');
                 });
         }
 
@@ -598,26 +566,11 @@ async function loadItemsByKategori(selectKategori, targetSelect) {
             modalSpinner.style.display = 'block';
             modalContent.style.display = 'none';
 
-            const modal = document.querySelector('[x-show="showDetail"]');
-            if (modal && modal.style.display === 'none') {
-                modal.style.display = 'block';
-                setTimeout(() => modal.classList.add('opacity-100'), 10);
-            }
-
             fetch(`/requestbarang/${tiket}`)
-                .then(response => {
-                    if (!response.ok) throw new Error('Not Found');
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     document.getElementById('modal-ticket-name').textContent = data.tiket;
-                    document.getElementById('modal-ticket-date').textContent = new Date(data.tanggal_permintaan)
-                        .toLocaleDateString('id-ID', {
-                            weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        });
+                    document.getElementById('modal-ticket-date').textContent = new Date(data.tanggal_permintaan).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
                     document.getElementById('modal-ticket-user').textContent = data.name || '-';
                     document.getElementById('modal-ticket-count').textContent = data.details.length;
 
@@ -638,15 +591,9 @@ async function loadItemsByKategori(selectKategori, targetSelect) {
                     modalSpinner.style.display = 'none';
                     modalContent.style.display = 'block';
                 })
-                .catch(error => {
-                    console.error('Error:', error);
+                .catch(() => {
                     modalSpinner.style.display = 'none';
-                    modalContent.innerHTML = `
-                        <div class="text-center text-red-600 p-4">
-                            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
-                            <p>Detail tidak ditemukan atau terjadi kesalahan.</p>
-                        </div>
-                    `;
+                    modalContent.innerHTML = `<div class="text-center text-red-600 p-4"><i class="fas fa-exclamation-triangle text-2xl mb-2"></i><p>Detail tidak ditemukan.</p></div>`;
                     modalContent.style.display = 'block';
                 });
         }

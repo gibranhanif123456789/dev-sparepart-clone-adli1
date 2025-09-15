@@ -12,9 +12,16 @@ class HomeController extends Controller
         return view('user.home');
     }
 
-  public function jenisBarang()
+    public function jenisBarang(Request $request)
 {
-    $jenisBarang = JenisBarang::with('listBarang')->get();
+    $kategori = $request->get('kategori');
+    $query = JenisBarang::query();
+
+    if ($kategori) {
+        $query->where('kategori', $kategori);
+    }
+
+    $jenisBarang = $query->with('listBarang')->get();
     return view('user.jenisbarang', compact('jenisBarang'));
 }
 }

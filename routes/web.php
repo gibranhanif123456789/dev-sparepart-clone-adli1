@@ -132,7 +132,7 @@ Route::prefix('requestbarang')
             ]);
         })->name('api.permintaan.status');
 
-        // ✅ API: Ambil jenis barang berdasarkan kategori
+        // API: Ambil jenis barang berdasarkan kategori
         Route::get('/api/jenis-barang', function (\Illuminate\Http\Request $request) {
             $kategori = $request->query('kategori');
             $query = \App\Models\JenisBarang::query();
@@ -146,17 +146,27 @@ Route::prefix('requestbarang')
             );
         })->name('api.jenis.barang');
 
-        // ✅ API: Ambil tipe barang berdasarkan kategori
-        Route::get('/api/tipe-barang', function (\Illuminate\Http\Request $request) {
-            $kategori = $request->query('kategori');
-            $query = \App\Models\TipeBarang::query();
+        // API: Ambil tipe barang berdasarkan kategori
+       Route::get('/api/tipe-barang', function (\Illuminate\Http\Request $request) {
+    $kategori = $request->query('kategori');
+    $jenisId = $request->query('jenis_id');
 
-            if ($kategori) {
-                $query->where('kategori', $kategori);
-            }
+    $query = \App\Models\TipeBarang::query();
 
-            return response()->json(
-                $query->orderBy('tipe')->get(['id', 'tipe as nama']) // <-- di sini: as nama
-            );
-        })->name('api.tipe.barang');
+    // Filter berdasarkan kategori
+    if ($kategori) {
+        $query->where('kategori', $kategori);
+    }
+
+    // Filter berdasarkan relasi ke jenis_barang melalui detail_barang
+    if ($jenisId) {
+        $query->whereHas('detailBarangs', function ($q) use ($jenisId) {
+            $q->where('jenis_id', $jenisId);
+        });
+    }
+
+    return response()->json(
+        $query->orderBy('tipe')->get(['id', 'tipe as nama'])
+    );
+})->name('api.tipe.barang');
     });

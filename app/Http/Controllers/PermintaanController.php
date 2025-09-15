@@ -37,41 +37,37 @@ class PermintaanController extends Controller
     /**
      * Simpan permintaan baru
      */
-    public function store(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'items' => 'required|array|min:1',
-            'items.*.nama' => 'required|string|max:50',
-            'items.*.deskripsi' => 'required|string|max:255',
-            'items.*.jumlah' => 'required|integer|min:1',
-            'items.*.keterangan' => 'nullable|string|max:255',
+   public function store(Request $request)
+{
+    $request->validate([
+        'items' => 'required|array|min:1',
+        'items.*.nama' => 'required|string|max:50',
+        'items.*.deskripsi' => 'required|string|max:255',
+        'items.*.jumlah' => 'required|integer|min:1',
+        'items.*.keterangan' => 'nullable|string|max:255',
+    ]);
+
+    $user = Auth::user();
+
+    // Tiket otomatis dibuat oleh model
+    $permintaan = Permintaan::create([
+        'user_id'            => $user->id,
+        'tanggal_permintaan' => now(),
+        'status'             => 'pending',
+    ]);
+
+    foreach ($request->items as $item) {
+        $permintaan->details()->create([
+            'tiket'      => $permintaan->tiket,
+            'nama_item'  => $item['nama'],
+            'deskripsi'  => $item['deskripsi'],
+            'jumlah'     => $item['jumlah'],
+            'keterangan' => $item['keterangan'] ?? null,
         ]);
-
-        // Ambil user login
-        $user = Auth::user();
-
-        // Buat permintaan baru (tiket akan auto-generate di model)
-        $permintaan = Permintaan::create([
-            'user_id'            => $user->id,
-            'tanggal_permintaan' => now(),
-            'status'             => 'pending',
-        ]);
-
-        // Simpan detail item permintaan
-        foreach ($request->items as $item) {
-            $permintaan->details()->create([
-                'tiket'      => $permintaan->tiket, // pakai tiket dari model
-                'nama_item'  => $item['nama'],
-                'deskripsi'  => $item['deskripsi'],
-                'jumlah'     => $item['jumlah'],
-                'keterangan' => $item['keterangan'] ?? null,
-            ]);
-        }
-
-        // Redirect ke halaman daftar permintaan
-        return redirect()->route('request.barang.index')->with('success', 'Permintaan berhasil dikirim!');
     }
+
+    return redirect()->route('request.barang.index')->with('success', 'Permintaan berhasil dikirim!');
+}
 
     /**
      * Ambil detail permintaan berdasarkan tiket (API)

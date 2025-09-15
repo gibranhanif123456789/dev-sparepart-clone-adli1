@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Permintaan extends Model
 {
@@ -16,17 +17,21 @@ class Permintaan extends Model
 
     public $timestamps = false;
 
+    /**
+     * Boot method untuk auto-generate tiket
+     */
     protected static function boot()
     {
         parent::boot();
 
         static::creating(function ($permintaan) {
-            $user   = auth()->user();
-            $region = strtoupper($user->region);
-            $year   = now()->year;
+            $user = Auth::check() ? Auth::user() : null;
+            $region = $user ? strtoupper($user->region ?? 'XXX') : 'XXX';
+            $bulan = now()->format('m'); // 01 - 12
+            $tahun = now()->year;
 
-            // Cari tiket terakhir untuk region & tahun ini
-            $lastPermintaan = self::where('tiket', 'like', "REQ-{$region}-{$year}-%")
+            // Cari tiket terakhir dengan pola: REQ-{region}-{bulan}-{tahun}-xxx
+            $lastPermintaan = self::where('tiket', 'LIKE', "REQ-{$region}-{$bulan}-{$tahun}-%")
                 ->orderBy('id', 'desc')
                 ->first();
 
@@ -35,10 +40,13 @@ class Permintaan extends Model
                 $number = (int)$matches[1] + 1;
             }
 
-            $permintaan->tiket = "REQ-{$region}-{$year}-" . str_pad($number, 3, '0', STR_PAD_LEFT);
+            $numberPadded = str_pad($number, 3, '0', STR_PAD_LEFT);
+
+            $permintaan->tiket = "REQ-{$region}-{$bulan}-{$tahun}-{$numberPadded}";
         });
     }
 
+    // Relasi
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

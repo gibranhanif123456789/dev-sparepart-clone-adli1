@@ -6,17 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipeBarang extends Model
 {
+    protected $table = 'tipe_barang';
     public $timestamps = false;
 
     protected $fillable = [
-        'jenis',
-        'kategori',
-];
+        'tipe',      // ✅ Diperbaiki dari 'jenis' → 'tipe'
+        'kategori'
+    ];
 
-    protected $table = 'tipe_barang';
-
-    public function listBarang()
+    public function listBarangs()
     {
-        return $this->hasMany(ListBarang::class, 'jenis_id');
+        return $this->hasMany(ListBarang::class, 'tipe_id');
+    }
+
+    public function detailBarangs()
+    {
+        return $this->hasMany(DetailBarang::class, 'tipe_id');
     }
 }
