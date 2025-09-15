@@ -370,7 +370,7 @@
             document.getElementById('history-section').classList.add('hidden');
             document.getElementById('form-section').classList.remove('hidden');
         }
-        // Inisialisasi dropdown pada baris pertama saat halaman dimuat
+       // Inisialisasi dropdown pada baris pertama saat halaman dimuat
 document.addEventListener('DOMContentLoaded', function () {
     const firstRow = document.querySelector('#request-table-body tr');
     if (!firstRow) return;
@@ -381,7 +381,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Pastikan elemen ada
     if (selectKategori && selectNama && selectTipe) {
-        // Jalankan fungsi saat halaman dimuat
+        // Pasang event listener agar reaktif saat ganti kategori
+        selectKategori.addEventListener('change', () => {
+            loadItemsByKategori(selectKategori, selectNama);
+            loadTipeByKategori(selectKategori, selectTipe);
+        });
+
+        // Isi dropdown saat halaman dimuat jika kategori sudah dipilih
         if (selectKategori.value) {
             loadItemsByKategori(selectKategori, selectNama);
             loadTipeByKategori(selectKategori, selectTipe);
