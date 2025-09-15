@@ -109,7 +109,7 @@
                         <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mr-4 group-hover:bg-blue-600 transition">
                             <i class="fas fa-cogs text-xl text-blue-600 group-hover:text-white"></i>
                         </div>
-                        <h3 class="text-2xl font-semibold text-gray-800">Daftar Barang</h3>
+                        <h3 class="text-2xl font-semibold text-gray-800">Daftar Sparepart</h3>
                     </div>
                     <p class="text-gray-600 mb-6">Lihat daftar semua jenis sparepart yang tersedia di sistem.</p>
                     <span class="btn-custom btn-jenis">Lihat Daftar <i class="fas fa-arrow-right"></i></span>
@@ -124,7 +124,7 @@
                         <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mr-4 group-hover:bg-green-600 transition">
                             <i class="fas fa-clipboard-list text-xl text-green-600 group-hover:text-white"></i>
                         </div>
-                        <h3 class="text-2xl font-semibold text-gray-800">Request Barang</h3>
+                        <h3 class="text-2xl font-semibold text-gray-800">Request Sparepart</h3>
                     </div>
                     <p class="text-gray-600 mb-6">Ajukan permintaan sparepart dengan cepat dan tercatat.</p>
                     <span class="btn-custom btn-request">Buat Request <i class="fas fa-plus"></i></span>

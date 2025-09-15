@@ -131,4 +131,32 @@ Route::prefix('requestbarang')
                 ])->filter()->first(),
             ]);
         })->name('api.permintaan.status');
+
+        // ✅ API: Ambil jenis barang berdasarkan kategori
+        Route::get('/api/jenis-barang', function (\Illuminate\Http\Request $request) {
+            $kategori = $request->query('kategori');
+            $query = \App\Models\JenisBarang::query();
+
+            if ($kategori) {
+                $query->where('kategori', $kategori);
+            }
+
+            return response()->json(
+                $query->orderBy('jenis')->get(['id', 'jenis as nama']) // <-- di sini: as nama
+            );
+        })->name('api.jenis.barang');
+
+        // ✅ API: Ambil tipe barang berdasarkan kategori
+        Route::get('/api/tipe-barang', function (\Illuminate\Http\Request $request) {
+            $kategori = $request->query('kategori');
+            $query = \App\Models\TipeBarang::query();
+
+            if ($kategori) {
+                $query->where('kategori', $kategori);
+            }
+
+            return response()->json(
+                $query->orderBy('tipe')->get(['id', 'tipe as nama']) // <-- di sini: as nama
+            );
+        })->name('api.tipe.barang');
     });

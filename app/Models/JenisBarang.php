@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class JenisBarang extends Model
 {
-    protected $fillable = ['jenis'];
+    protected $fillable = [
+        'jenis',
+         'kategori', 
+    ];
 
     protected $table = 'jenis_barang';
 

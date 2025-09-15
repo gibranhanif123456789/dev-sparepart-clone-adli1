@@ -18,7 +18,8 @@ class ListBarang extends Model
         'kode_region',
         'tanggal',
         'pic',
-        'department'
+        'department',
+        'kategori',
     ];
 
     protected $casts = [
